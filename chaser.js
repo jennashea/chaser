@@ -2,7 +2,19 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
 let ball = { x: 250, y: 150, dx: 3, dy: 5, radius: 20, color: "lemonchiffon" };
-let enemy = { x: 250, y: 250, width: 30, color: "red" };
+
+class Enemy {
+  constructor(x, y, width, color) {
+    Object.assign(this, {x,y,width,color});
+  };
+};
+
+let enemies = [
+  new Enemy(80,200,20,'crimson'),
+  new Enemy(200,110,25,'orange'),
+  new Enemy(102,283,17,'mauve')
+];
+
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
   const { left, top } = canvas.getBoundingClientRect();
