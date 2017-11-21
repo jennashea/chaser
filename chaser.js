@@ -12,7 +12,7 @@ class Enemy {
 let enemies = [
   new Enemy(80,200,20,'crimson'),
   new Enemy(200,110,25,'orange'),
-  new Enemy(102,283,17,'mauve')
+  new Enemy(102,283,17,'purple')
 ];
 
 let mouse = { x: 0, y: 0 };
