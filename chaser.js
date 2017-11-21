@@ -1,14 +1,20 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
-let ball = {
-  x: 250,
-  y: 150,
-  radius: 15,
-  color: "lemonchiffon",
-  speed: 0.07
-};
-let mouse = { x: 0, y: 0 };
+class Player {
+  constructor(x, y, radius, color, speed) {
+    Object.assign(this, {x, y, radius, color, speed});
+  }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+}
+
+let player = new Player(250, 150, 15, 'lemonchiffon', 0.07);
 
 class Enemy {
   constructor(x, y, width, color, speed) {
@@ -32,31 +38,20 @@ class Enemy {
 }
 
 let enemies = [
-  new Enemy(80, 200, 20, 'rgba(250,0,50,0.2)', 0.02),
-  new Enemy(200, 250, 17, 'rgba(200,100,70,0.7)', 0.01),
-  new Enemy(150, 180, 22, 'rgba(50,10,70,0.5)', 0.002),
+  new Enemy(80, 200, 20, 'rgba(250, 0, 50, 0.8)', 0.02),
+  new Enemy(200, 250, 17, 'rgba(200, 100, 0, 0.7)', 0.01),
+  new Enemy(150, 180, 22, 'rgba(50, 10, 70, 0.5)', 0.002),
 ];
 
+
+let mouse = { x: 0, y: 0 };
+document.body.addEventListener("mousemove", updateMouse);
 function updateMouse(event) {
   const { left, top } = canvas.getBoundingClientRect();
   mouse.x = event.clientX - left;
   mouse.y = event.clientY - top;
 }
 
-document.body.addEventListener("mousemove", updateMouse);
-
-function clearBackground() {
-  ctx.fillStyle = "lightgreen";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-function drawBall() {
-  ctx.fillStyle = ball.color;
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.stroke();
-}
 
 function moveToward(leader, follower, speed) {
   follower.x += (leader.x - follower.x) * speed;
@@ -64,13 +59,18 @@ function moveToward(leader, follower, speed) {
 }
 
 function updateScene() {
-  moveToward(mouse, ball, ball.speed);
-  enemies.forEach(enemy => moveToward(ball, enemy, enemy.speed));
+  moveToward(mouse, player, player.speed);
+  enemies.forEach(enemy => moveToward(player, enemy, enemy.speed));
+}
+
+function clearBackground() {
+  ctx.fillStyle = "lightgreen";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawScene() {
   clearBackground();
-  drawBall();
+  player.draw();
   enemies.forEach(enemy => enemy.draw());
   updateScene();
   requestAnimationFrame(drawScene);
