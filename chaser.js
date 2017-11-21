@@ -17,9 +17,9 @@ class Enemy {
 }
 
 let enemies = [
-  new Enemy(80, 200, 20, 'crimson', 0.02),
-  new Enemy(200, 250, 17, 'orange', 0.01),
-  new Enemy(150, 180, 22, 'purple', 0.002),
+  new Enemy(80, 200, 20, 'rgba(250,0,50,0.2)', 0.02),
+  new Enemy(200, 250, 17, 'rgba(200,100,70,0.7)', 0.01),
+  new Enemy(150, 180, 22, 'rgba(50,10,70,0.5)', 0.002),
 ];
 
 function updateMouse(event) {
