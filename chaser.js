@@ -14,6 +14,21 @@ class Enemy {
   constructor(x, y, width, color, speed) {
     Object.assign(this, {x, y, width, color, speed});
   }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.fillRect(
+      this.x - this.width / 2,
+      this.y - this.width / 2,
+      this.width,
+      this.width
+    );
+    ctx.strokeRect(
+      this.x - this.width / 2,
+      this.y - this.width / 2,
+      this.width,
+      this.width
+    );
+  }
 }
 
 let enemies = [
@@ -43,22 +58,6 @@ function drawBall() {
   ctx.stroke();
 }
 
-function drawEnemy(enemy) {
-  ctx.fillStyle = enemy.color;
-  ctx.fillRect(
-    enemy.x - enemy.width / 2,
-    enemy.y - enemy.width / 2,
-    enemy.width,
-    enemy.width
-  );
-  ctx.strokeRect(
-    enemy.x - enemy.width / 2,
-    enemy.y - enemy.width / 2,
-    enemy.width,
-    enemy.width
-  );
-}
-
 function moveToward(leader, follower, speed) {
   follower.x += (leader.x - follower.x) * speed;
   follower.y += (leader.y - follower.y) * speed;
@@ -72,7 +71,7 @@ function updateScene() {
 function drawScene() {
   clearBackground();
   drawBall();
-  enemies.forEach(drawEnemy);
+  enemies.forEach(enemy => enemy.draw());
   updateScene();
   requestAnimationFrame(drawScene);
 }
