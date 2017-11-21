@@ -2,3 +2,6 @@ canvas{
     border: 1px solid royalblue;
     margin:20px;
 }
+ h1 {
+   font: 60px "Comic Sans MS";
+ }
