@@ -1,10 +1,7 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
-class Player {
-  constructor(x, y, radius, color, speed) {
-    Object.assign(this, {x, y, radius, color, speed});
-  }
+class Sprite {
   draw() {
     ctx.fillStyle = this.color;
     ctx.beginPath();
@@ -14,26 +11,19 @@ class Player {
   }
 }
 
+class Player extends Sprite {
+  constructor(x, y, radius, color, speed) {
+    super();
+    Object.assign(this, {x, y, radius, color, speed});
+  }
+}
+
 let player = new Player(250, 150, 15, 'lemonchiffon', 0.07);
 
-class Enemy {
-  constructor(x, y, width, color, speed) {
-    Object.assign(this, {x, y, width, color, speed});
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(
-      this.x - this.width / 2,
-      this.y - this.width / 2,
-      this.width,
-      this.width
-    );
-    ctx.strokeRect(
-      this.x - this.width / 2,
-      this.y - this.width / 2,
-      this.width,
-      this.width
-    );
+class Enemy extends Sprite {
+  constructor(x, y, radius, color, speed) {
+    super();
+    Object.assign(this, {x, y, radius, color, speed});
   }
 }
 
