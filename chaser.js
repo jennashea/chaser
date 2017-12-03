@@ -1,6 +1,7 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
+const button = document.querySelector("button");
 
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
@@ -81,3 +82,5 @@ function drawScene() {
 }
 
 requestAnimationFrame(drawScene);
+
+button.addEventListener("click", drawScene());
