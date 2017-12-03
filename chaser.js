@@ -96,4 +96,4 @@ function drawScene() {
 
 requestAnimationFrame(drawScene);
 
-button.addEventListener("click", drawScene());
+button.addEventListener("click", drawScene);
