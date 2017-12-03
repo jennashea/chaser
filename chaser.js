@@ -82,16 +82,20 @@ function updateScene() {
   });
 }
 
+function endScene(){
+   if (progressBar.value <= 0) {
+   //alert('Game over');
+   } else {
+     requestAnimationFrame(drawScene);
+   }
+}
+
 function drawScene() {
   clearBackground();
   player.draw();
   enemies.forEach(enemy => enemy.draw());
   updateScene();
-  if (progressBar.value <= 0) {
-   //alert('Game over');
-  } else {
-    requestAnimationFrame(drawScene);
-  }
+  endScene();
 }
 
 requestAnimationFrame(drawScene);
