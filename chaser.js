@@ -24,10 +24,23 @@ class Sprite {
 class Player extends Sprite {
   constructor(x, y, radius, color, speed) {
     super();
-    Object.assign(this, { x, y, radius, color, speed });
+    this.image = new Image();
+    this.image.src = "https://res.cloudinary.com/misclg/image/upload/v1512336321/mikuSprite_znz98t.png";
+    Object.assign(this, {x, y, radius, color, speed});
+  }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.strokeStyle = "indianred";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.drawImage(this.image, this.x -42, this.y-32, 64, 64);
   }
 }
-let player = new Player(250, 150, 20, "lemonchiffon", 0.07);
+
+let player = new Player(250, 150, 15, 'lemonchiffon', 0.07);
 
 class Enemy extends Sprite {
   constructor(x, y, radius, color, speed) {
@@ -74,7 +87,7 @@ function drawScene() {
   enemies.forEach(enemy => enemy.draw());
   updateScene();
   if (progressBar.value <= 0) {
-   alert('Game over');
+   //alert('Game over');
   } else {
     requestAnimationFrame(drawScene);
   }
