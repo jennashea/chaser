@@ -59,7 +59,9 @@ let enemies = [
   new Enemy(200, 250, 17, "rgba(50,200,70,0.7)", 0.01),
   new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)
 ];
-
+function spawnEnemy(){
+  enemies.unshift(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), 12,"blue", Math.random()*(player.speed - 0.01)));
+}
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
   const { left, top } = canvas.getBoundingClientRect();
