@@ -68,7 +68,7 @@ function updateMouse(event) {
 }
 document.body.addEventListener("mousemove", updateMouse);
 function clearBackground() {
-  ctx.fillStyle = "cadetblue";
+  ctx.fillStyle = "wheat";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
