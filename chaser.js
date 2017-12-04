@@ -61,7 +61,7 @@ let enemies = [
   new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)
 ];
 function spawnEnemy(){
-  enemies.push(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), 12,"blue", Math.random()*(player.speed - 0.01)));
+  enemies.push(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*(30),"blue", Math.random()*(player.speed - 0.01)));
 }
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
