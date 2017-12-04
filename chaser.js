@@ -56,9 +56,9 @@ class Enemy extends Sprite {
 }
 
 let enemies = [
-  new Enemy(80, 200, 20, "rgba(250,1,180,0.9)", 0.02),
+  /*new Enemy(80, 200, 20, "rgba(250,1,180,0.9)", 0.02),
   new Enemy(200, 250, 17, "rgba(50,200,70,0.7)", 0.01),
-  new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)
+  new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)*/
 ];
 function spawnEnemy(){
   enemies.push(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*(30),"blue", Math.random()*(player.speed - 0.01)));
