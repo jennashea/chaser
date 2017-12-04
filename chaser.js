@@ -8,7 +8,6 @@ const spawn = setInterval(spawnEnemy, 3000);
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
 }
-
 class Sprite {
   draw() {
     ctx.fillStyle = this.color;
@@ -22,28 +21,17 @@ class Sprite {
   hasCollided(sprite2) {
     return distanceBetween(this ,sprite2) < this.radius + sprite2.radius;
   }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 1119a8672dc188684073f0cb9dea59b0b297b4f4
 }
+
 class Player extends Sprite {
   constructor(x, y, radius, color, speed) {
-    super();
+    super(); 
     this.image = new Image();
-    this.image.src = "https://res.cloudinary.com/misclg/image/upload/v1512336321/mikuSprite_znz98t.png";
+    this.image.src = "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
     Object.assign(this, {x, y, radius, color, speed});
   }
-<<<<<<< HEAD
-
-  draw() {
-    /*HIT BOX
-=======
-    
   draw() {
     /*HIT BOX 
->>>>>>> 1119a8672dc188684073f0cb9dea59b0b297b4f4
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -66,13 +54,17 @@ class Enemy extends Sprite {
 }
 
 let enemies = [
-  /*new Enemy(80, 200, 20, "rgba(250,1,180,0.9)", 0.02),
+  /*
+  new Enemy(80, 200, 20, "rgba(250,1,180,0.9)", 0.02),
   new Enemy(200, 250, 17, "rgba(50,200,70,0.7)", 0.01),
-  new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)*/
+  new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)
+  */
 ];
+
 function spawnEnemy(){
-  enemies.push(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*(30),"blue", Math.random()*(player.speed - 0.01)));
+  enemies.unshift(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*30 +5,"blue", Math.random()*(player.speed - 0.01)));
 }
+
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
   const { left, top } = canvas.getBoundingClientRect();
@@ -98,7 +90,6 @@ function updateScene() {
     }
   });
 }
-
 function endScene(){
    if (progressBar.value <= 0) {
    //alert('Game over');
@@ -106,7 +97,6 @@ function endScene(){
      requestAnimationFrame(drawScene);
    }
 }
-
 function drawScene() {
   clearBackground();
   player.draw();
