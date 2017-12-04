@@ -22,7 +22,11 @@ class Sprite {
   hasCollided(sprite2) {
     return distanceBetween(this ,sprite2) < this.radius + sprite2.radius;
   }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 1119a8672dc188684073f0cb9dea59b0b297b4f4
 }
 class Player extends Sprite {
   constructor(x, y, radius, color, speed) {
@@ -31,9 +35,15 @@ class Player extends Sprite {
     this.image.src = "https://res.cloudinary.com/misclg/image/upload/v1512336321/mikuSprite_znz98t.png";
     Object.assign(this, {x, y, radius, color, speed});
   }
+<<<<<<< HEAD
 
   draw() {
     /*HIT BOX
+=======
+    
+  draw() {
+    /*HIT BOX 
+>>>>>>> 1119a8672dc188684073f0cb9dea59b0b297b4f4
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
