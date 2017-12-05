@@ -2,7 +2,9 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
 const button = document.querySelector("button");
+const defaultCharacterDimensions= 64;
 const playerDimensions = 64;
+const enemyDimensions = 64;
 let points = 0;
 let scoreMultiplier = 1;
 
@@ -13,41 +15,40 @@ class Sprite {
   draw() {
     ctx.fillStyle = this.color;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
     ctx.strokeStyle = "salmon";
     ctx.fill();
     ctx.lineWidth = 2;
     ctx.stroke();
   }
   hasCollided(sprite2) {
-    return distanceBetween(this, sprite2) < this.radius + sprite2.radius;
+    return distanceBetween(this, sprite2) < this.hitBoxRadius + sprite2.hitBoxRadius;
   }
 }
 
 class Player extends Sprite {
-  constructor(x, y, radius, color, speed) {
+  constructor(x, y, hitBoxRadius, color, speed) {
     super();
     this.image = new Image();
     this.image.src =
       "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
-    Object.assign(this, { x, y, radius, color, speed });
+    this.dimensions= defaultCharacterDimensions;
+    Object.assign(this, { x, y, hitBoxRadius, color, speed });
   }
   draw() {
-    /*HIT BOX 
     ctx.fillStyle = this.color;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.strokeStyle = "indianred";
+    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "salmon";
     ctx.fill();
     ctx.lineWidth = 2;
     ctx.stroke();
-    */
     ctx.drawImage(
       this.image,
-      this.x - playerDimensions * 2 / 3,
-      this.y - playerDimensions / 2,
-      playerDimensions,
-      playerDimensions
+      this.x - this.dimensions / 3,
+      this.y - this.dimensions / 2,
+      this.dimensions,
+      this.dimensions
     );
   }
 }
@@ -55,24 +56,37 @@ class Player extends Sprite {
 let player = new Player(250, 150, playerDimensions / 3, "lemonchiffon", 0.07);
 
 class Enemy extends Sprite {
-  constructor(x, y, radius, color, speed) {
+  constructor(x, y, hitBoxRadius, color, speed) {
     super();
-    Object.assign(this, { x, y, radius, color, speed });
+    this.image = new Image();
+    this.image.src =
+      "http://res.cloudinary.com/randomstuff/image/upload/v1512513576/VirusSprite_qmtkaq.png";
+    Object.assign(this, { x, y, hitBoxRadius, color, speed });
+  }  
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "salmon";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.drawImage(
+      this.image,
+      this.x - enemyDimensions/ 2,
+      this.y - enemyDimensions / 2,
+      enemyDimensions,
+      enemyDimensions
+    );
   }
 }
 
-let enemies = [
-  /*
-  new Enemy(80, 200, 20, "rgba(250,1,180,0.9)", 0.02),
-  new Enemy(200, 250, 17, "rgba(50,200,70,0.7)", 0.01),
-  new Enemy(150, 180, 22, "rgba(80,200,190,0.4)", 0.05)
-  */
-];
+let enemies = [];
 
 class ScoreFactor extends Sprite {
-  constructor(x, y, radius, color) {
+  constructor(x, y, hitBoxRadius, color) {
     super();
-    Object.assign(this, { x, y, radius, color });
+    Object.assign(this, { x, y, hitBoxRadius, color });
   }
   activate() {
     scoreMultiplier++;
@@ -86,9 +100,9 @@ class ScoreFactor extends Sprite {
 let scoreFactors = [];
 
 class EnemyEraser extends Sprite {
-  constructor(x, y, radius, color) {
+  constructor(x, y, hitBoxRadius, color) {
     super();
-    Object.assign(this, { x, y, radius, color });
+    Object.assign(this, { x, y, hitBoxRadius, color });
   }
   activate() {
     enemies.pop();
@@ -144,13 +158,13 @@ function endScene() {
   } else {
     requestAnimationFrame(drawScene);
   }
-}
+} 
 function drawScene() {
   clearBackground();
-  player.draw();
   enemies.forEach(enemy => enemy.draw());
   scoreFactors.forEach(scoreFactor => scoreFactor.draw());
   enemyErasers.forEach(enemyEraser => enemyEraser.draw());
+  player.draw();
   updateScene();
   endScene();
 }
@@ -160,7 +174,7 @@ function spawnEnemy() {
     new Enemy(
       Math.random() * canvas.width,
       Math.random() * canvas.height,
-      Math.random() * 30 + 5,
+      20,
       "blue",
       Math.random() * (player.speed - player.speed / 30)
     )
@@ -204,3 +218,4 @@ const score = setInterval(IncreaseScore, 1000);
 requestAnimationFrame(drawScene);
 
 button.addEventListener("click", drawScene);
+ 
