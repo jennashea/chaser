@@ -2,9 +2,9 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
 const button = document.querySelector("button");
-const playerDimensions= 64;
-let points= 0;
-let scoreMultiplier=1;
+const playerDimensions = 64;
+let points = 0;
+let scoreMultiplier = 1;
 
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
@@ -20,16 +20,17 @@ class Sprite {
     ctx.stroke();
   }
   hasCollided(sprite2) {
-    return distanceBetween(this ,sprite2) < this.radius + sprite2.radius;
+    return distanceBetween(this, sprite2) < this.radius + sprite2.radius;
   }
 }
 
 class Player extends Sprite {
   constructor(x, y, radius, color, speed) {
-    super(); 
+    super();
     this.image = new Image();
-    this.image.src = "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
-    Object.assign(this, {x, y, radius, color, speed});
+    this.image.src =
+      "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
+    Object.assign(this, { x, y, radius, color, speed });
   }
   draw() {
     /*HIT BOX 
@@ -41,11 +42,17 @@ class Player extends Sprite {
     ctx.lineWidth = 2;
     ctx.stroke();
     */
-    ctx.drawImage(this.image, this.x - playerDimensions*2/3, this.y-playerDimensions/2, playerDimensions, playerDimensions);
+    ctx.drawImage(
+      this.image,
+      this.x - playerDimensions * 2 / 3,
+      this.y - playerDimensions / 2,
+      playerDimensions,
+      playerDimensions
+    );
   }
 }
 
-let player = new Player(250, 150, playerDimensions/3, 'lemonchiffon', 0.07);
+let player = new Player(250, 150, playerDimensions / 3, "lemonchiffon", 0.07);
 
 class Enemy extends Sprite {
   constructor(x, y, radius, color, speed) {
@@ -65,18 +72,34 @@ let enemies = [
 class ScoreFactor extends Sprite {
   constructor(x, y, radius, color) {
     super();
-    Object.assign(this, { x, y, radius, color});
+    Object.assign(this, { x, y, radius, color });
   }
-  activate(){
-    scoreMultiplier++; 
+  activate() {
+    scoreMultiplier++;
   }
-  erase(){
+  erase() {
     let eraseIndex = scoreFactors.indexOf(this);
-    scoreFactors.splice(eraseIndex,1);
+    scoreFactors.splice(eraseIndex, 1);
   }
 }
 
-let scoreFactors=[];
+let scoreFactors = [];
+
+class EnemyEraser extends Sprite {
+  constructor(x, y, radius, color) {
+    super();
+    Object.assign(this, { x, y, radius, color });
+  }
+  activate() {
+    enemies.pop();
+  }
+  erase() {
+    let eraseIndex = enemyErasers.indexOf(this);
+    enemyErasers.splice(eraseIndex, 1);
+  }
+}
+
+let enemyErasers = [];
 
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
@@ -103,46 +126,81 @@ function updateScene() {
     }
   });
   scoreFactors.forEach(scoreFactor => {
-    if (scoreFactor.hasCollided(player)){
+    if (scoreFactor.hasCollided(player)) {
       scoreFactor.activate();
       scoreFactor.erase();
     }
   });
+  enemyErasers.forEach(enemyEraser => {
+    if (enemyEraser.hasCollided(player)) {
+      enemyEraser.activate();
+      enemyEraser.erase();
+    }
+  });
 }
-function endScene(){
-   if (progressBar.value <= 0) {
-   //alert('Game over');
-   } else {
-     requestAnimationFrame(drawScene);
-   }
+function endScene() {
+  if (progressBar.value <= 0) {
+    //alert('Game over');
+  } else {
+    requestAnimationFrame(drawScene);
+  }
 }
 function drawScene() {
   clearBackground();
   player.draw();
   enemies.forEach(enemy => enemy.draw());
   scoreFactors.forEach(scoreFactor => scoreFactor.draw());
+  enemyErasers.forEach(enemyEraser => enemyEraser.draw());
   updateScene();
   endScene();
 }
 
-function IncreaseScore (){
-  if (progressBar.value > 0){
-    let pointIncrease= 10* scoreMultiplier;
+function spawnEnemy() {
+  enemies.unshift(
+    new Enemy(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      Math.random() * 30 + 5,
+      "blue",
+      Math.random() * (player.speed - player.speed / 30)
+    )
+  );
+}
+
+function spawnScoreFactor() {
+  scoreFactors.unshift(
+    new ScoreFactor(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      10,
+      "green"
+    )
+  );
+}
+
+function spawnEnemyEraser() {
+  enemyErasers.unshift(
+    new EnemyEraser(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      8,
+      "purple"
+    )
+  );
+}
+function IncreaseScore() {
+  if (progressBar.value > 0) {
+    let pointIncrease = 10 * scoreMultiplier;
     points += pointIncrease;
     document.getElementById("score").innerHTML = points;
   }
 }
-function spawnScoreFactor(){
-  scoreFactors.unshift(new ScoreFactor(Math.random()*(canvas.width),Math.random()*(canvas.height), 10,"green"));
-}
 
-function spawnEnemy(){
-  enemies.unshift(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*30 +5,"blue", Math.random()*(player.speed - player.speed/30)));
-}
-
-const score = setInterval(IncreaseScore,1000);
 const spawnEnemies = setInterval(spawnEnemy, 3000);
-const spawnScoreFactors =setInterval(spawnScoreFactor,5000);
+const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
+const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
+const score = setInterval(IncreaseScore, 1000);
+
 requestAnimationFrame(drawScene);
 
 button.addEventListener("click", drawScene);
