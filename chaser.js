@@ -3,7 +3,6 @@ const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
 const button = document.querySelector("button");
 const playerDimensions= 64;
-const spawn = setInterval(spawnEnemy, 3000);
 let points= 0;
 let scoreMultiplier=1;
 
@@ -63,9 +62,21 @@ let enemies = [
   */
 ];
 
-function spawnEnemy(){
-  enemies.unshift(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*30 +5,"blue", Math.random()*(player.speed - 0.01)));
+class ScoreFactor extends Sprite {
+  constructor(x, y, radius, color) {
+    super();
+    Object.assign(this, { x, y, radius, color});
+  }
+  activate(){
+    scoreMultiplier++; 
+  }
+  erase(){
+    let eraseIndex = scoreFactors.indexOf(this);
+    scoreFactors.splice(eraseIndex,1);
+  }
 }
+
+let scoreFactors=[];
 
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
@@ -91,6 +102,12 @@ function updateScene() {
       progressBar.value -= 2;
     }
   });
+  scoreFactors.forEach(scoreFactor => {
+    if (scoreFactor.hasCollided(player)){
+      scoreFactor.activate();
+      scoreFactor.erase();
+    }
+  });
 }
 function endScene(){
    if (progressBar.value <= 0) {
@@ -103,6 +120,7 @@ function drawScene() {
   clearBackground();
   player.draw();
   enemies.forEach(enemy => enemy.draw());
+  scoreFactors.forEach(scoreFactor => scoreFactor.draw());
   updateScene();
   endScene();
 }
@@ -114,8 +132,17 @@ function IncreaseScore (){
     document.getElementById("score").innerHTML = points;
   }
 }
+function spawnScoreFactor(){
+  scoreFactors.unshift(new ScoreFactor(Math.random()*(canvas.width),Math.random()*(canvas.height), 10,"green"));
+}
+
+function spawnEnemy(){
+  enemies.unshift(new Enemy(Math.random()*(canvas.width),Math.random()*(canvas.height), Math.random()*30 +5,"blue", Math.random()*(player.speed - player.speed/30)));
+}
 
 const score = setInterval(IncreaseScore,1000);
+const spawnEnemies = setInterval(spawnEnemy, 3000);
+const spawnScoreFactors =setInterval(spawnScoreFactor,5000);
 requestAnimationFrame(drawScene);
 
 button.addEventListener("click", drawScene);
