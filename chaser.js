@@ -4,6 +4,8 @@ const progressBar = document.querySelector("progress");
 const button = document.querySelector("button");
 const playerDimensions= 64;
 const spawn = setInterval(spawnEnemy, 3000);
+let points= 0;
+let scoreMultiplier=1;
 
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
@@ -105,6 +107,15 @@ function drawScene() {
   endScene();
 }
 
+function IncreaseScore (){
+  if (progressBar.value > 0){
+    let pointIncrease= 10* scoreMultiplier;
+    points += pointIncrease;
+    document.getElementById("score").innerHTML = points;
+  }
+}
+
+const score = setInterval(IncreaseScore,1000);
 requestAnimationFrame(drawScene);
 
 button.addEventListener("click", drawScene);
