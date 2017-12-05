@@ -2,54 +2,51 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
 const button = document.querySelector("button");
-const defaultCharacterDimensions= 64;
+const defaultCharacterDimensions = 64;
+const defaultPowerUpDimensions =64;
 const playerDimensions = 64;
 const enemyDimensions = 64;
 let points = 0;
 let scoreMultiplier = 1;
-
+ 
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
 }
 class Sprite {
   draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "salmon";
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.stroke();
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = "salmon";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.drawImage(
+      this.image,
+      this.x - this.dimensions / this.centerLineFraction,
+      this.y - this.dimensions / 2,
+      this.dimensions,
+      this.dimensions
+    );
   }
   hasCollided(sprite2) {
-    return distanceBetween(this, sprite2) < this.hitBoxRadius + sprite2.hitBoxRadius;
+    return (
+      distanceBetween(this, sprite2) < this.hitBoxRadius + sprite2.hitBoxRadius
+    );
   }
 }
-
+class PowerUp extends Sprite {
+  
+}
 class Player extends Sprite {
   constructor(x, y, hitBoxRadius, color, speed) {
     super();
     this.image = new Image();
     this.image.src =
       "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
-    this.dimensions= defaultCharacterDimensions;
+    this.dimensions = defaultCharacterDimensions;
+    this.centerLineFraction=3;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "salmon";
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.drawImage(
-      this.image,
-      this.x - this.dimensions / 3,
-      this.y - this.dimensions / 2,
-      this.dimensions,
-      this.dimensions
-    );
   }
 }
 
@@ -61,32 +58,23 @@ class Enemy extends Sprite {
     this.image = new Image();
     this.image.src =
       "http://res.cloudinary.com/randomstuff/image/upload/v1512513576/VirusSprite_qmtkaq.png";
+    this.dimensions = defaultCharacterDimensions;
+    this.centerLineFraction =2;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
-  }  
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "salmon";
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.drawImage(
-      this.image,
-      this.x - enemyDimensions/ 2,
-      this.y - enemyDimensions / 2,
-      enemyDimensions,
-      enemyDimensions
-    );
   }
 }
 
 let enemies = [];
 
-class ScoreFactor extends Sprite {
+class ScoreFactor extends PowerUp {
   constructor(x, y, hitBoxRadius, color) {
     super();
     Object.assign(this, { x, y, hitBoxRadius, color });
+    this.image = new Image();
+    this.image.src =
+      "http://res.cloudinary.com/misclg/image/upload/v1512363142/PowerUpSprite_Leek.png";
+    this.dimensions = defaultPowerUpDimensions;
+    this.centerLineFraction=2;
   }
   activate() {
     scoreMultiplier++;
@@ -99,7 +87,7 @@ class ScoreFactor extends Sprite {
 
 let scoreFactors = [];
 
-class EnemyEraser extends Sprite {
+class EnemyEraser extends PowerUp {
   constructor(x, y, hitBoxRadius, color) {
     super();
     Object.assign(this, { x, y, hitBoxRadius, color });
@@ -110,6 +98,15 @@ class EnemyEraser extends Sprite {
   erase() {
     let eraseIndex = enemyErasers.indexOf(this);
     enemyErasers.splice(eraseIndex, 1);
+  }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "salmon";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.stroke();
   }
 }
 
@@ -158,7 +155,7 @@ function endScene() {
   } else {
     requestAnimationFrame(drawScene);
   }
-} 
+}
 function drawScene() {
   clearBackground();
   enemies.forEach(enemy => enemy.draw());
@@ -186,7 +183,7 @@ function spawnScoreFactor() {
     new ScoreFactor(
       Math.random() * canvas.width,
       Math.random() * canvas.height,
-      10,
+      15,
       "green"
     )
   );
@@ -218,4 +215,3 @@ const score = setInterval(IncreaseScore, 1000);
 requestAnimationFrame(drawScene);
 
 button.addEventListener("click", drawScene);
- 
