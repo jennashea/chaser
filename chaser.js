@@ -290,7 +290,7 @@ function IncreaseScore() {
 const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
-const spawnHealth = setInterval(spawnHealth, 4500);
+const spawnHealths = setInterval(spawnHealth, 4500);
 const score = setInterval(IncreaseScore, 1000);
 
 requestAnimationFrame(drawScene);
