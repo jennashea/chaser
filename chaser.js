@@ -218,6 +218,12 @@ function updateScene() {
       healthPowerI.erase();
     }
   });
+  freezeEnemies.forEach(freezeEnemy1 => {
+    if (freezeEnemy1.hasCollided(player)) {
+      freezeEnemy1.activate();
+      freezeEnemy1.erase();
+    }
+  });
 }
 function endScene() {
   if (progressBar.value <= 0) {
@@ -232,6 +238,7 @@ function drawScene() {
   scoreFactors.forEach(scoreFactor => scoreFactor.draw());
   enemyErasers.forEach(enemyEraser => enemyEraser.draw());
   healthPower.forEach(healthPowerUp => healthPowerUp.draw());
+  freezeEnemies.forEach(freezeEnemyI => freezeEnemyI.draw());
   player.draw();
   updateScene();
   endScene();
@@ -282,6 +289,17 @@ function spawnHealth() {
   );
 }
 
+function spawnFreeze() {
+  freezeEnemies.unshift(
+    new freezeEnemy(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      8,
+      "aquamarine"
+    )
+  );
+}
+
 function IncreaseScore() {
   if (progressBar.value > 0) {
     let pointIncrease = 10 * scoreMultiplier;
@@ -299,6 +317,7 @@ const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
 const spawnHealths = setInterval(spawnHealth, 4500);
+const spawnFreeze = setInterval(spawnFreeze, 5500);
 const score = setInterval(IncreaseScore, 1000);
 const addSeconds = setInterval(IncreaseTime,1000);
 
