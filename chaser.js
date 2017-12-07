@@ -8,6 +8,7 @@ const playerDimensions = 64;
 const enemyDimensions = 64;
 let points = 0;
 let scoreMultiplier = 1;
+let time = 0;
 
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
@@ -153,8 +154,10 @@ class freezeEnemy extends PowerUp {
     this.centerLineFraction=2;
   }
   activate() {
-    enemies.forEach(enemy => enemy.speed =0);
-
+    let currentTime = time;
+    while(time<= currentTime+10){
+      enemies.forEach(enemy => enemy.speed =0);
+    }
   }
   erase() {
     let freezeIndex = freezeEnemies.indexOf(this);
@@ -286,12 +289,19 @@ function IncreaseScore() {
     document.getElementById("score").innerHTML = points;
   }
 }
+function IncreaseTime() {
+  if (progressBar.value > 0) {
+    time++;
+  };
+};
 
 const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
 const spawnHealths = setInterval(spawnHealth, 4500);
 const score = setInterval(IncreaseScore, 1000);
+const addSeconds = setInterval(IncreaseTime,1000);
+
 
 requestAnimationFrame(drawScene);
 
