@@ -8,7 +8,7 @@ const playerDimensions = 64;
 const enemyDimensions = 64;
 let points = 0;
 let scoreMultiplier = 1;
- 
+
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
 }
@@ -36,7 +36,7 @@ class Sprite {
   }
 }
 class PowerUp extends Sprite {
-  
+
 }
 class Player extends Sprite {
   constructor(x, y, hitBoxRadius, color, speed) {
@@ -111,6 +111,36 @@ class EnemyEraser extends PowerUp {
 }
 
 let enemyErasers = [];
+
+class Health extends PowerUp {
+  constructor(x, y, hitBoxRadius, color) {
+    super();
+    Object.assign(this, { x, y, hitBoxRadius, color });
+    this.image = new Image();
+    this.image.src =
+      "http://res.cloudinary.com/misclg/image/upload/v1512580030/PowerUpSprite_Health.png";
+    this.dimensions = defaultPowerUpDimensions;
+    this.centerLineFraction=2;
+  }
+  activate() {
+    progressBar.value += 10;
+  }
+  erase() {
+    let healthIndex = healthPower.indexOf(this);
+    healthPower.splice(healthIndex, 1);
+  }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "mediumpurple";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+let healthPower = [];
 
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
@@ -199,6 +229,18 @@ function spawnEnemyEraser() {
     )
   );
 }
+
+function spawnHealth() {
+  healthPower.unshift(
+    new Health(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      8,
+      "royalblue"
+    )
+  );
+}
+
 function IncreaseScore() {
   if (progressBar.value > 0) {
     let pointIncrease = 10 * scoreMultiplier;
