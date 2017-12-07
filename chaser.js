@@ -142,6 +142,37 @@ class Health extends PowerUp {
 
 let healthPower = [];
 
+class freezeEnemy extends PowerUp {
+  constructor(x, y, hitBoxRadius, color) {
+    super();
+    Object.assign(this, { x, y, hitBoxRadius, color });
+    this.image = new Image();
+    this.image.src =
+      "http://res.cloudinary.com/misclg/image/upload/v1512623984/PowerUpSprite_Snowflake.png";
+    this.dimensions = defaultPowerUpDimensions;
+    this.centerLineFraction=2;
+  }
+  activate() {
+    enemies.forEach(enemy => enemy.speed =0);
+
+  }
+  erase() {
+    let freezeIndex = freezeEnemies.indexOf(this);
+    freezeEnemies.splice(freezeIndex, 1);
+  }
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+    ctx.strokeStyle = "sienna";
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+let freezeEnemies = [];
+
 let mouse = { x: 0, y: 0 };
 function updateMouse(event) {
   const { left, top } = canvas.getBoundingClientRect();
@@ -197,6 +228,7 @@ function drawScene() {
   enemies.forEach(enemy => enemy.draw());
   scoreFactors.forEach(scoreFactor => scoreFactor.draw());
   enemyErasers.forEach(enemyEraser => enemyEraser.draw());
+  healthPower.forEach(healthPowerUp => healthPowerUp.draw());
   player.draw();
   updateScene();
   endScene();
@@ -258,6 +290,7 @@ function IncreaseScore() {
 const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
+const spawnHealth = setInterval(spawnHealth, 4500);
 const score = setInterval(IncreaseScore, 1000);
 
 requestAnimationFrame(drawScene);
