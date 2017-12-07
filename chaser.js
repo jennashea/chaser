@@ -178,6 +178,12 @@ function updateScene() {
       enemyEraser.erase();
     }
   });
+  healthPower.forEach(healthPowerI => {
+    if (healthPowerI.hasCollided(player)) {
+      healthPowerI.activate();
+      healthPowerI.erase();
+    }
+  });
 }
 function endScene() {
   if (progressBar.value <= 0) {
