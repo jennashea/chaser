@@ -155,7 +155,7 @@ class freezeEnemy extends PowerUp {
   }
   activate() {
     let currentTime = time;
-    while(time<= currentTime+10){
+    while(time<= (currentTime+10)){
       enemies.forEach(enemy => enemy.speed =0);
     }
   }
@@ -323,5 +323,3 @@ const addSeconds = setInterval(IncreaseTime,1000);
 
 
 requestAnimationFrame(drawScene);
-
-button.addEventListener("click", drawScene);
