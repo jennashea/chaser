@@ -317,7 +317,7 @@ const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
 const spawnHealths = setInterval(spawnHealth, 4500);
-const spawnFreeze = setInterval(spawnFreeze, 5500);
+const spawnFreezes = setInterval(spawnFreeze, 5500);
 const score = setInterval(IncreaseScore, 1000);
 const addSeconds = setInterval(IncreaseTime,1000);
 
