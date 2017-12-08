@@ -157,6 +157,7 @@ class freezeEnemy extends PowerUp {
     let currentTime = time;
     while(time<= (currentTime+10)){
       enemies.forEach(enemy => enemy.speed =0);
+      time++;
     }
   }
   erase() {
