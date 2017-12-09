@@ -2,6 +2,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
 const button = document.querySelector("button");
+const gameOverScreen = document.getElementById("gameOver");
 const defaultCharacterDimensions = 64;
 const defaultPowerUpDimensions = 64;
 const playerDimensions = 64;
@@ -12,7 +13,7 @@ let drawHitBox = false;
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
 }
-
+       
 class Sprite {
   draw() {
     if (drawHitBox) {
@@ -23,7 +24,7 @@ class Sprite {
       ctx.fill();
       ctx.lineWidth = 2;
       ctx.stroke();
-    }
+    } 
     ctx.drawImage(
       this.image,
       this.x - this.dimensions / this.centerLineFraction,
@@ -49,14 +50,14 @@ class Sprite {
       sprite2.x += dx * distToMove / 2;
       sprite2.y += dy * distToMove / 2;
     }
-  }
-}
+  } 
+} 
 class Player extends Sprite {
   constructor(x, y, hitBoxRadius, color, speed) {
     super();
     this.image = new Image();
     this.image.src =
-      "https://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
+      "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
     this.dimensions = defaultCharacterDimensions;
     this.centerLineFraction = 3;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
@@ -84,7 +85,7 @@ class Enemy extends Sprite {
     super();
     this.image = new Image();
     this.image.src =
-      "https://res.cloudinary.com/randomstuff/image/upload/v1512513576/VirusSprite_qmtkaq.png";
+      "http://res.cloudinary.com/randomstuff/image/upload/v1512513576/VirusSprite_qmtkaq.png";
     this.dimensions = defaultCharacterDimensions;
     this.centerLineFraction = 2;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
@@ -115,7 +116,7 @@ class ScoreFactor extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "https://res.cloudinary.com/misclg/image/upload/v1512363142/PowerUpSprite_Leek.png";
+      "http://res.cloudinary.com/misclg/image/upload/v1512363142/PowerUpSprite_Leek.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction = 2;
     this.powerUpType = "scoreFactor";
@@ -131,14 +132,14 @@ class EnemyEraser extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "https://res.cloudinary.com/misclg/image/upload/v1512616230/PowerUpSprite_Harisen.png";
+      "http://res.cloudinary.com/misclg/image/upload/v1512616230/PowerUpSprite_Harisen.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction = 2;
     this.powerUpType = "enemyEraser";
   }
   activate() {
     enemies.splice(findIndexOfFastestEnemy(), 3);
-
+    
   }
 }
 class Health extends PowerUp {
@@ -147,7 +148,7 @@ class Health extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "https://res.cloudinary.com/misclg/image/upload/v1512689192/PowerUpSprite_Health.png";
+      "http://res.cloudinary.com/misclg/image/upload/v1512689192/PowerUpSprite_Health.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction = 2;
     this.powerUpType = "health";
@@ -168,20 +169,20 @@ document.body.addEventListener("mousemove", updateMouse);
 function clearBackground() {
   //ctx.fillStyle = rgba(220,220,220, 0.5);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-}
+  
+}   
 
 function moveToward(leader, follower, speed) {
   follower.x += (leader.x - follower.x) * speed;
   follower.y += (leader.y - follower.y) * speed;
-}
+} 
 function updateScene() {
   moveToward(mouse, player, player.speed);
   enemies.forEach(enemy => moveToward(player, enemy, enemy.speed));
   enemies.forEach(enemy => {
     if (enemy.hasCollided(player)) {
       progressBar.value -= 10;
-    }
+    } 
   });
   for (let i = 0; i < enemies.length; i++) {
     for (let j = i+1; j < enemies.length; j++) {
@@ -202,8 +203,7 @@ function updateScene() {
 
 function endScene() {
   if (progressBar.value <= 0) {
-    ctx.font = "30px Brush Script MT";
-    ctx.fillText("YOU'VE BEEN INFECTED", 0, canvas.height / 2);
+    gameOverScreen.style.display="inline";
   } else {
     requestAnimationFrame(drawScene);
   }
@@ -248,7 +248,7 @@ function createNewPowerUp(powerUpType) {
 function spawnScoreFactor() {
   createNewPowerUp(`scoreFactor`);
 }
-
+ 
 function spawnEnemyEraser() {
   createNewPowerUp("enemyEraser");
 }
@@ -272,16 +272,17 @@ const score = setInterval(IncreaseScore, 1000);
 requestAnimationFrame(drawScene);
 
 function restartGame() {
-  for (const powerUp in powerUps) {
-    powerUps[powerUp].objects=[];
+  if (progressBar.value === 0) {
+    for (const powerUp in powerUps) {
+      powerUps[powerUp].objects=[];
+    }
+    enemies=[];
+    gameOverScreen.style.display="none";
+    progressBar.value = 100;
+    Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
+    requestAnimationFrame(drawScene);
   }
-  enemies=[];
-  progressBar.value = 100;
-  points = 0;
-  scoreMultiplier = 1;
-  Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
-  requestAnimationFrame(drawScene);
-
 }
 
 button.addEventListener("click", restartGame);
+   
