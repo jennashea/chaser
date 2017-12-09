@@ -1,22 +1,26 @@
 body {
-  text-align:center;    
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+  background-color: lemonchiffon;
 }
  
 h1 {
   font-family: "Brush Script MT";
 }
 canvas {
-  border: 5px solid cadetblue;
-  /*margin: auto;*/
+  border: 5px solid royalblue;
+  margin: 20px;
   
 }
 progress {
   height:15px;
   width:600px;
   border: 4px solid cadetBlue;
+  radius:6px;
   background-color: blue ;
   color:royalblue;
 }
-scoreKeeper{
+.scoreKeeper{
   font-family: Sans;
 }

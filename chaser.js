@@ -227,6 +227,8 @@ function updateScene() {
     for (let j = i+1; j < enemies.length; j++) {
       enemies[i].pushOff(enemies[j]);
     }
+    player.pushOff(enemies[i]);
+
   }
   const interact = function interactWithPlayer(object) {
     if (object.hasCollided(player)) {
