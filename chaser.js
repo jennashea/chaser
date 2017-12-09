@@ -143,37 +143,37 @@ class Health extends PowerUp {
 
 let healthPower = [];
 
-class freezeEnemy extends PowerUp {
-  constructor(x, y, hitBoxRadius, color) {
-    super();
-    Object.assign(this, { x, y, hitBoxRadius, color });
-    this.image = new Image();
-    this.image.src =
-      "http://res.cloudinary.com/misclg/image/upload/v1512623984/PowerUpSprite_Snowflake.png";
-    this.dimensions = defaultPowerUpDimensions;
-    this.centerLineFraction=2;
-  }
-  activate() {
-    let currentTime = time;
-    while(time<= (currentTime+10)){
-      enemies.forEach(enemy => enemy.speed =0);
-      time++;
-    }
-  }
-  erase() {
-    let freezeIndex = freezeEnemies.indexOf(this);
-    freezeEnemies.splice(freezeIndex, 1);
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "sienna";
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
-}
+// class freezeEnemy extends PowerUp {
+//   constructor(x, y, hitBoxRadius, color) {
+//     super();
+//     Object.assign(this, { x, y, hitBoxRadius, color });
+//     this.image = new Image();
+//     this.image.src =
+//       "http://res.cloudinary.com/misclg/image/upload/v1512623984/PowerUpSprite_Snowflake.png";
+//     this.dimensions = defaultPowerUpDimensions;
+//     this.centerLineFraction=2;
+//   }
+//   activate() {
+//     let currentTime = time;
+//     while(time<= (currentTime+10)){
+//       enemies.forEach(enemy => enemy.speed =0);
+//       time++;
+//     }
+//   }
+//   erase() {
+//     let freezeIndex = freezeEnemies.indexOf(this);
+//     freezeEnemies.splice(freezeIndex, 1);
+//   }
+//   draw() {
+//     ctx.fillStyle = this.color;
+//     ctx.beginPath();
+//     ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+//     ctx.strokeStyle = "sienna";
+//     ctx.fill();
+//     ctx.lineWidth = 2;
+//     ctx.stroke();
+//   }
+// }
 
 let freezeEnemies = [];
 
@@ -219,12 +219,12 @@ function updateScene() {
       healthPowerI.erase();
     }
   });
-  freezeEnemies.forEach(freezeEnemy1 => {
-    if (freezeEnemy1.hasCollided(player)) {
-      freezeEnemy1.activate();
-      freezeEnemy1.erase();
-    }
-  });
+  // freezeEnemies.forEach(freezeEnemy1 => {
+  //   if (freezeEnemy1.hasCollided(player)) {
+  //     freezeEnemy1.activate();
+  //     freezeEnemy1.erase();
+  //   }
+  // });
 }
 function endScene() {
   if (progressBar.value <= 0) {
@@ -239,7 +239,7 @@ function drawScene() {
   scoreFactors.forEach(scoreFactor => scoreFactor.draw());
   enemyErasers.forEach(enemyEraser => enemyEraser.draw());
   healthPower.forEach(healthPowerUp => healthPowerUp.draw());
-  freezeEnemies.forEach(freezeEnemyI => freezeEnemyI.draw());
+  // freezeEnemies.forEach(freezeEnemyI => freezeEnemyI.draw());
   player.draw();
   updateScene();
   endScene();
@@ -318,7 +318,7 @@ const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
 const spawnHealths = setInterval(spawnHealth, 4500);
-const spawnFreezes = setInterval(spawnFreeze, 5500);
+// const spawnFreezes = setInterval(spawnFreeze, 5500);
 const score = setInterval(IncreaseScore, 1000);
 const addSeconds = setInterval(IncreaseTime,1000);
 
