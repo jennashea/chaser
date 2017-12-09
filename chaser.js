@@ -8,6 +8,7 @@ const playerDimensions = 64;
 const enemyDimensions = 64;
 let points = 0;
 let scoreMultiplier = 1;
+let drawHitBox =false;
 let time = 0;
 
 function distanceBetween(sprite1, sprite2) {
@@ -15,13 +16,15 @@ function distanceBetween(sprite1, sprite2) {
 }
 class Sprite {
   draw() {
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-      ctx.strokeStyle = "salmon";
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      if (drawHitBox) {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
+          ctx.strokeStyle = "salmon";
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        } 
       ctx.drawImage(
       this.image,
       this.x - this.dimensions / this.centerLineFraction,
@@ -35,10 +38,21 @@ class Sprite {
       distanceBetween(this, sprite2) < this.hitBoxRadius + sprite2.hitBoxRadius
     );
   }
+    pushOff(sprite2) {
+    let [dx, dy] = [sprite2.x - this.x, sprite2.y - this.y];
+    const L = Math.hypot(dx, dy);
+    let distToMove = this.hitBoxRadius + sprite2.hitBoxRadius - L;
+    if (distToMove > 0) {
+      dx /= L;
+      dy /= L;
+      this.x -= dx * distToMove / 2;
+      this.y -= dy * distToMove / 2;
+      sprite2.x += dx * distToMove / 2;
+      sprite2.y += dy * distToMove / 2;
+    }
+  } 
 }
-class PowerUp extends Sprite {
 
-}
 class Player extends Sprite {
   constructor(x, y, hitBoxRadius, color, speed) {
     super();
@@ -49,9 +63,23 @@ class Player extends Sprite {
     this.centerLineFraction=3;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
   }
+    pushOff(sprite2) {
+    let [dx, dy] = [sprite2.x - this.x, sprite2.y - this.y];
+    const distance = this.hitBoxRadius + sprite2.hitBoxRadius;
+    if (this.hasCollided(sprite2)) {
+      sprite2.x += 4 * sprite2.hitBoxRadius * dx / distance;
+      sprite2.y += 4 * sprite2.hitBoxRadius * dy / distance;
+    }
+  }
 }
 
-let player = new Player(250, 150, playerDimensions / 3, "lemonchiffon", 0.07);
+let player = new Player(
+  250,
+  150,
+  defaultCharacterDimensions / 3,
+  "lemonchiffon",
+  0.07
+);
 
 class Enemy extends Sprite {
   constructor(x, y, hitBoxRadius, color, speed) {
@@ -67,6 +95,24 @@ class Enemy extends Sprite {
 
 let enemies = [];
 
+function findIndexOfFastestEnemy() {
+  let enemySpeeds = enemies.map(enemy => enemy.speed);
+  return enemySpeeds.indexOf(Math.max(...enemySpeeds));
+}
+
+class PowerUp extends Sprite {
+    deleteSelf() {
+        let eraseIndex = powerUps[this.powerUpType].objects.indexOf(this);
+        powerUps[this.powerUpType].objects.splice(eraseIndex, 1);
+    }
+}
+
+const powerUps = {
+  scoreFactor: { objects: [], hitBoxColor: "green" },
+  enemyEraser: { objects: [], hitBoxColor: "purple" },
+  health: { objects: [], hitBoxColor: "mediumpurple" }
+};
+
 class ScoreFactor extends PowerUp {
   constructor(x, y, hitBoxRadius, color) {
     super();
@@ -76,42 +122,29 @@ class ScoreFactor extends PowerUp {
       "http://res.cloudinary.com/misclg/image/upload/v1512363142/PowerUpSprite_Leek.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction=2;
+    this.powerUpType = "scoreFactor";
   }
   activate() {
     scoreMultiplier++;
   }
-  erase() {
-    let eraseIndex = scoreFactors.indexOf(this);
-    scoreFactors.splice(eraseIndex, 1);
-  }
 }
-
-let scoreFactors = [];
 
 class EnemyEraser extends PowerUp {
   constructor(x, y, hitBoxRadius, color) {
     super();
     Object.assign(this, { x, y, hitBoxRadius, color });
+      this.image = new Image();
+    this.image.src =
+      "http://res.cloudinary.com/misclg/image/upload/v1512616230/PowerUpSprite_Harisen.png";
+    this.dimensions = defaultPowerUpDimensions;
+    this.centerLineFraction = 2;
+    this.powerUpType = "enemyEraser";
   }
   activate() {
-    enemies.pop();
-  }
-  erase() {
-    let eraseIndex = enemyErasers.indexOf(this);
-    enemyErasers.splice(eraseIndex, 1);
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "salmon";
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    enemies.splice(findIndexOfFastestEnemy(), 1);
   }
 }
 
-let enemyErasers = [];
 
 class Health extends PowerUp {
   constructor(x, y, hitBoxRadius, color) {
@@ -119,29 +152,16 @@ class Health extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "http://res.cloudinary.com/misclg/image/upload/v1512580030/PowerUpSprite_Health.png";
+      "http://res.cloudinary.com/misclg/image/upload/v1512689192/PowerUpSprite_Health.png";
     this.dimensions = defaultPowerUpDimensions;
-    this.centerLineFraction=2;
+    this.centerLineFraction = 2;
+    this.powerUpType = "health";
   }
   activate() {
     progressBar.value += 10;
   }
-  erase() {
-    let healthIndex = healthPower.indexOf(this);
-    healthPower.splice(healthIndex, 1);
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.hitBoxRadius, 0, Math.PI * 2);
-    ctx.strokeStyle = "mediumpurple";
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.stroke();
-  }
 }
 
-let healthPower = [];
 
 // class freezeEnemy extends PowerUp {
 //   constructor(x, y, hitBoxRadius, color) {
@@ -183,7 +203,9 @@ function updateMouse(event) {
   mouse.x = event.clientX - left;
   mouse.y = event.clientY - top;
 }
+
 document.body.addEventListener("mousemove", updateMouse);
+
 function clearBackground() {
   ctx.fillStyle = "wheat";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -198,27 +220,23 @@ function updateScene() {
   enemies.forEach(enemy => moveToward(player, enemy, enemy.speed));
   enemies.forEach(enemy => {
     if (enemy.hasCollided(player)) {
-      progressBar.value -= 2;
+      progressBar.value -= 10;
     }
   });
-  scoreFactors.forEach(scoreFactor => {
-    if (scoreFactor.hasCollided(player)) {
-      scoreFactor.activate();
-      scoreFactor.erase();
-    }
+  enemies.forEach((enemy, i) => {
+    enemy.pushOff(enemies[(i + 1) % enemies.length]);
+    player.pushOff(enemy);
   });
-  enemyErasers.forEach(enemyEraser => {
-    if (enemyEraser.hasCollided(player)) {
-      enemyEraser.activate();
-      enemyEraser.erase();
+  const interact = function interactWithPlayer(object) {
+    if (object.hasCollided(player)) {
+      object.activate();
+      object.deleteSelf();
     }
-  });
-  healthPower.forEach(healthPowerI => {
-    if (healthPowerI.hasCollided(player)) {
-      healthPowerI.activate();
-      healthPowerI.erase();
-    }
-  });
+  };
+  for (const powerUp in powerUps) {
+    powerUps[powerUp].objects.forEach(interact);
+  }
+    
   // freezeEnemies.forEach(freezeEnemy1 => {
   //   if (freezeEnemy1.hasCollided(player)) {
   //     freezeEnemy1.activate();
@@ -236,9 +254,9 @@ function endScene() {
 function drawScene() {
   clearBackground();
   enemies.forEach(enemy => enemy.draw());
-  scoreFactors.forEach(scoreFactor => scoreFactor.draw());
-  enemyErasers.forEach(enemyEraser => enemyEraser.draw());
-  healthPower.forEach(healthPowerUp => healthPowerUp.draw());
+  for (const powerUp in powerUps) {
+    powerUps[powerUp].objects.forEach(object => object.draw());
+  }
   // freezeEnemies.forEach(freezeEnemyI => freezeEnemyI.draw());
   player.draw();
   updateScene();
@@ -257,37 +275,28 @@ function spawnEnemy() {
   );
 }
 
+function createNewPowerUp(powerUpType) {
+  const className = `${powerUpType.charAt(0).toUpperCase() +
+    powerUpType.slice(1)}`;
+  const constructorCall = Reflect.construct(eval(className), [
+    Math.random() * canvas.width,
+    Math.random() * canvas.height,
+    15,
+    powerUps[powerUpType].hitBoxColor
+  ]);
+  if (progressBar.value > 0) {
+    powerUps[powerUpType].objects.unshift(constructorCall);
+  }
+}
 function spawnScoreFactor() {
-  scoreFactors.unshift(
-    new ScoreFactor(
-      Math.random() * canvas.width,
-      Math.random() * canvas.height,
-      15,
-      "green"
-    )
-  );
+  createNewPowerUp(`scoreFactor`);
 }
 
 function spawnEnemyEraser() {
-  enemyErasers.unshift(
-    new EnemyEraser(
-      Math.random() * canvas.width,
-      Math.random() * canvas.height,
-      8,
-      "purple"
-    )
-  );
+  createNewPowerUp("enemyEraser");
 }
-
 function spawnHealth() {
-  healthPower.unshift(
-    new Health(
-      Math.random() * canvas.width,
-      Math.random() * canvas.height,
-      8,
-      "royalblue"
-    )
-  );
+  createNewPowerUp("health");
 }
 
 function spawnFreeze() {
