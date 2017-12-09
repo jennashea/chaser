@@ -1,7 +1,22 @@
-canvas{
-    border: 1px solid royalblue;
-    margin:20px;
+body {
+  text-align:center;    
 }
- h1 {
-   font: 60px "Comic Sans MS";
- }
+ 
+h1 {
+  font-family: "Brush Script MT";
+}
+canvas {
+  border: 5px solid royalblue;
+  margin: auto;
+  
+}
+progress {
+  height:15px;
+  width:600px;
+  border: 4px solid cadetBlue;
+  background-color: blue ;
+  color:royalblue;
+}
+scoreKeeper{
+  font-family: Sans;
+}
