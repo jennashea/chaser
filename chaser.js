@@ -343,5 +343,5 @@ const spawnHealths = setInterval(spawnHealth, 4500);
 const score = setInterval(IncreaseScore, 1000);
 const addSeconds = setInterval(IncreaseTime,1000);
 
-button.addEventListener("click", startGame);
+document.getElementById("button").addEventListener("click", startGame);
 requestAnimationFrame(drawScene);
