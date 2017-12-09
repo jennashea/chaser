@@ -3,6 +3,7 @@ body {
   margin-left:auto;
   margin-right:auto;
   background-color: lemonchiffon;
+  background-image: url("https://images.alphacoders.com/574/thumb-1920-57491.jpg");
 }
  
 h1 {
@@ -21,6 +22,9 @@ progress {
   background-color: blue ;
   color:royalblue;
 }
-.scoreKeeper{
+#scoreKeeper{
   font-family: Sans;
+}
+#canvas {
+  background-color:rgba(220,220,220, 0.5); 
 }

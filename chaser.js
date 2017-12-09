@@ -207,8 +207,8 @@ function updateMouse(event) {
 document.body.addEventListener("mousemove", updateMouse);
 
 function clearBackground() {
-  ctx.fillStyle = "wheat";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(220,220,220, 0.8)";
 }
 
 function moveToward(leader, follower, speed) {
