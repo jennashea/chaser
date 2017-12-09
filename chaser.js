@@ -271,6 +271,10 @@ const score = setInterval(IncreaseScore, 1000);
 requestAnimationFrame(drawScene);
 function restartGame() {
   if (progressBar.value === 0) {
+    for (const powerUp in powerUps) {
+      powerUps[powerUp].objects=[];
+    }
+    enemies=[];
     progressBar.value = 100;
     Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
     requestAnimationFrame(drawScene);
