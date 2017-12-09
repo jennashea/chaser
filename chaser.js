@@ -56,7 +56,7 @@ class Player extends Sprite {
     super();
     this.image = new Image();
     this.image.src =
-      "http://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
+      "https://res.cloudinary.com/misclg/image/upload/v1512342979/mikuSprite_Left.png";
     this.dimensions = defaultCharacterDimensions;
     this.centerLineFraction = 3;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
@@ -84,7 +84,7 @@ class Enemy extends Sprite {
     super();
     this.image = new Image();
     this.image.src =
-      "http://res.cloudinary.com/randomstuff/image/upload/v1512513576/VirusSprite_qmtkaq.png";
+      "https://res.cloudinary.com/randomstuff/image/upload/v1512513576/VirusSprite_qmtkaq.png";
     this.dimensions = defaultCharacterDimensions;
     this.centerLineFraction = 2;
     Object.assign(this, { x, y, hitBoxRadius, color, speed });
@@ -115,7 +115,7 @@ class ScoreFactor extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "http://res.cloudinary.com/misclg/image/upload/v1512363142/PowerUpSprite_Leek.png";
+      "https://res.cloudinary.com/misclg/image/upload/v1512363142/PowerUpSprite_Leek.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction = 2;
     this.powerUpType = "scoreFactor";
@@ -131,7 +131,7 @@ class EnemyEraser extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "http://res.cloudinary.com/misclg/image/upload/v1512616230/PowerUpSprite_Harisen.png";
+      "https://res.cloudinary.com/misclg/image/upload/v1512616230/PowerUpSprite_Harisen.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction = 2;
     this.powerUpType = "enemyEraser";
@@ -147,7 +147,7 @@ class Health extends PowerUp {
     Object.assign(this, { x, y, hitBoxRadius, color });
     this.image = new Image();
     this.image.src =
-      "http://res.cloudinary.com/misclg/image/upload/v1512689192/PowerUpSprite_Health.png";
+      "https://res.cloudinary.com/misclg/image/upload/v1512689192/PowerUpSprite_Health.png";
     this.dimensions = defaultPowerUpDimensions;
     this.centerLineFraction = 2;
     this.powerUpType = "health";
@@ -286,4 +286,3 @@ function restartGame() {
 }
 
 button.addEventListener("click", restartGame);
-   
