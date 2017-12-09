@@ -275,6 +275,8 @@ function restartGame() {
       powerUps[powerUp].objects=[];
     }
     enemies=[];
+    points = 0;
+    scoreMultiplier = 1;
     progressBar.value = 100;
     Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
     requestAnimationFrame(drawScene);
