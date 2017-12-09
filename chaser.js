@@ -223,10 +223,11 @@ function updateScene() {
       progressBar.value -= 10;
     }
   });
-  enemies.forEach((enemy, i) => {
-    enemy.pushOff(enemies[(i + 1) % enemies.length]);
-    player.pushOff(enemy);
-  });
+  for (let i = 0; i < enemies.length; i++) {
+    for (let j = i+1; j < enemies.length; j++) {
+      enemies[i].pushOff(enemies[j]);
+    }
+  }
   const interact = function interactWithPlayer(object) {
     if (object.hasCollided(player)) {
       object.activate();

@@ -6,8 +6,8 @@ h1 {
   font-family: "Brush Script MT";
 }
 canvas {
-  border: 5px solid royalblue;
-  margin: auto;
+  border: 5px solid cadetblue;
+  /*margin: auto;*/
   
 }
 progress {
