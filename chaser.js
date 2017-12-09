@@ -24,7 +24,7 @@ class Sprite {
           ctx.fill();
           ctx.lineWidth = 2;
           ctx.stroke();
-        } 
+        }
       ctx.drawImage(
       this.image,
       this.x - this.dimensions / this.centerLineFraction,
@@ -50,7 +50,7 @@ class Sprite {
       sprite2.x += dx * distToMove / 2;
       sprite2.y += dy * distToMove / 2;
     }
-  } 
+  }
 }
 
 class Player extends Sprite {
@@ -239,7 +239,7 @@ function updateScene() {
   for (const powerUp in powerUps) {
     powerUps[powerUp].objects.forEach(interact);
   }
-    
+
   // freezeEnemies.forEach(freezeEnemy1 => {
   //   if (freezeEnemy1.hasCollided(player)) {
   //     freezeEnemy1.activate();
@@ -249,7 +249,8 @@ function updateScene() {
 }
 function endScene() {
   if (progressBar.value <= 0) {
-    //alert('Game over');
+    ctx.font = "30px Arial";
+    ctx.fillText("Game over, click to play again", 0, canvas.height / 2);
   } else {
     requestAnimationFrame(drawScene);
   }
@@ -326,6 +327,14 @@ function IncreaseTime() {
   };
 };
 
+function restartGame() {
+  if (progressBar.value === 0) {
+    progressBar.value = 100;
+    Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
+    requestAnimationFrame(drawScene);
+  }
+}
+
 const spawnEnemies = setInterval(spawnEnemy, 3000);
 const spawnScoreFactors = setInterval(spawnScoreFactor, 5000);
 const spawnEnemyErasers = setInterval(spawnEnemyEraser, 4000);
@@ -334,5 +343,5 @@ const spawnHealths = setInterval(spawnHealth, 4500);
 const score = setInterval(IncreaseScore, 1000);
 const addSeconds = setInterval(IncreaseTime,1000);
 
-
+button.addEventListener("click", startGame);
 requestAnimationFrame(drawScene);
