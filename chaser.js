@@ -344,5 +344,5 @@ const score = setInterval(IncreaseScore, 1000);
 const addSeconds = setInterval(IncreaseTime,1000);
 
 
-button.addEventListener("click", startGame);
+button.addEventListener("click", restartGame);
 requestAnimationFrame(drawScene);
