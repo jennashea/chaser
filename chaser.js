@@ -13,7 +13,7 @@ let drawHitBox = false;
 function distanceBetween(sprite1, sprite2) {
   return Math.hypot(sprite1.x - sprite2.x, sprite1.y - sprite2.y);
 }
-       
+
 class Sprite {
   draw() {
     if (drawHitBox) {
@@ -24,7 +24,7 @@ class Sprite {
       ctx.fill();
       ctx.lineWidth = 2;
       ctx.stroke();
-    } 
+    }
     ctx.drawImage(
       this.image,
       this.x - this.dimensions / this.centerLineFraction,
@@ -50,8 +50,8 @@ class Sprite {
       sprite2.x += dx * distToMove / 2;
       sprite2.y += dy * distToMove / 2;
     }
-  } 
-} 
+  }
+}
 class Player extends Sprite {
   constructor(x, y, hitBoxRadius, color, speed) {
     super();
@@ -139,7 +139,7 @@ class EnemyEraser extends PowerUp {
   }
   activate() {
     enemies.splice(findIndexOfFastestEnemy(), 3);
-    
+
   }
 }
 class Health extends PowerUp {
@@ -169,20 +169,20 @@ document.body.addEventListener("mousemove", updateMouse);
 function clearBackground() {
   //ctx.fillStyle = rgba(220,220,220, 0.5);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-}   
+
+}
 
 function moveToward(leader, follower, speed) {
   follower.x += (leader.x - follower.x) * speed;
   follower.y += (leader.y - follower.y) * speed;
-} 
+}
 function updateScene() {
   moveToward(mouse, player, player.speed);
   enemies.forEach(enemy => moveToward(player, enemy, enemy.speed));
   enemies.forEach(enemy => {
     if (enemy.hasCollided(player)) {
       progressBar.value -= 10;
-    } 
+    }
   });
   for (let i = 0; i < enemies.length; i++) {
     for (let j = i+1; j < enemies.length; j++) {
@@ -248,7 +248,7 @@ function createNewPowerUp(powerUpType) {
 function spawnScoreFactor() {
   createNewPowerUp(`scoreFactor`);
 }
- 
+
 function spawnEnemyEraser() {
   createNewPowerUp("enemyEraser");
 }
@@ -272,17 +272,15 @@ const score = setInterval(IncreaseScore, 1000);
 requestAnimationFrame(drawScene);
 
 function restartGame() {
-  if (progressBar.value === 0) {
-    for (const powerUp in powerUps) {
-      powerUps[powerUp].objects=[];
-    }
-    enemies=[];
-    gameOverScreen.style.display="none";
-    progressBar.value = 100;
-    Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
-    requestAnimationFrame(drawScene);
+  for (const powerUp in powerUps) {
+    powerUps[powerUp].objects=[];
   }
+  enemies=[];
+  gameOverScreen.style.display="none";
+  progressBar.value = 100;
+  Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
+  requestAnimationFrame(drawScene);
+
 }
 
 button.addEventListener("click", restartGame);
-   
