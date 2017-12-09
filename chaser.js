@@ -202,7 +202,8 @@ function updateScene() {
 
 function endScene() {
   if (progressBar.value <= 0) {
-    //alert('Game over');
+    ctx.font = "30px Brush Script MT";
+    ctx.fillText("YOU'VE BEEN INFECTED", 0, canvas.height / 2);
   } else {
     requestAnimationFrame(drawScene);
   }
