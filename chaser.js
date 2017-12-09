@@ -1,7 +1,7 @@
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const progressBar = document.querySelector("progress");
-const restartButton = document.querySelector("button");
+const button = document.querySelector("button");
 const defaultCharacterDimensions = 64;
 const defaultPowerUpDimensions = 64;
 const playerDimensions = 64;
@@ -269,18 +269,21 @@ const spawnHealthRecovery = setInterval(spawnHealth, 30000);
 const score = setInterval(IncreaseScore, 1000);
 
 requestAnimationFrame(drawScene);
+
 function restartGame() {
   if (progressBar.value === 0) {
     for (const powerUp in powerUps) {
       powerUps[powerUp].objects=[];
     }
     enemies=[];
+    progressBar.value = 100;
     points = 0;
     scoreMultiplier = 1;
-    progressBar.value = 100;
+
     Object.assign(player, { x: canvas.width / 2, y: canvas.height / 2 });
     requestAnimationFrame(drawScene);
   }
 }
 
-restartButton.addEventListener("click", restartGame);
+button.addEventListener("click", restartGame);
+   
